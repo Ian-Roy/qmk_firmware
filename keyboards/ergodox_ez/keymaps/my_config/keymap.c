@@ -16,7 +16,8 @@ enum custom_keycodes {
   RGB_SLD,
   IPDB,
   ATTPA,
-  DCQ
+  DCQ,
+  WLEN
 };
 
 enum unicode_names {
@@ -128,7 +129,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // left hand
  // left hand
   KC_TRNS,         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-  DYN_MACRO_PLAY1, IPDB, ATTPA, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+  DYN_MACRO_PLAY1, IPDB, ATTPA, WLEN, KC_TRNS, KC_TRNS, KC_TRNS,
   KC_TRNS,         LALT(LSFT(KC_D)), KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
   KC_TRNS,         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
   KC_TRNS,         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
@@ -168,19 +169,22 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
       case EPRM:
         eeconfig_init();
-        return false;
+        break;
       case VRSN:
         SEND_STRING (QMK_KEYBOARD "/" QMK_KEYMAP " @ " QMK_VERSION);
-        return false;
+        break;
       case IPDB:
         SEND_STRING("import ipdb; ipdb.set_trace()");
-        return false;
+        break;
       case ATTPA:
         SEND_STRING("@tpastream.com");
-        return false;
+        break;
       // case DCQ:// crawl safe quit command 
       //   SEND_STRING(SS_LCTL("d") SS_DELAY(2000) "c" SS_TAP(X_ENT) SS_DELAY(2000) "q" SS_TAP(X_ENT));
       //   return false;
+      case WLEN:
+        SEND_STRING(SS_TAP(X_HOME)"len("SS_TAP(X_END)")");
+        break;
       #ifdef RGBLIGHT_ENABLE
       case RGB_SLD:
         rgblight_mode(1);
@@ -210,9 +214,9 @@ void dynamic_macro_record_start_user(void) {
 }
 
 void dynamic_macro_record_end_user(int8_t direction){
-    ergodox_right_led_1_off();
-    ergodox_right_led_2_off();
-    ergodox_right_led_3_off();
+    ergodox_right_led_1_on();
+    ergodox_right_led_2_on();
+    ergodox_right_led_3_on();
 
 }
 

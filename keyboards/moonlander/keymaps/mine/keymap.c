@@ -39,13 +39,39 @@ enum custom_keycodes {
 
 // Tap Dance declarations
 enum {
-    TD_TAB_ENTER,
-};
+    TD_C_X,
+    TD_1_F1,
+    TD_2_F2 ,
+    TD_3_F3 ,
+    TD_4_F4,
+    TD_5_F5 ,
+    TD_6_F6 ,
+    TD_7_F7  ,
+    TD_8_F8 ,
+    TD_9_F9 ,
+    TD_0_F10 ,
+    TD_EQ_F11 ,
+    TD_PIPE_F12 ,
+    };
 
 // Tap Dance definitions
 qk_tap_dance_action_t tap_dance_actions[] = {
     // Tap once for Escape, twice for Caps Lock
-    [TD_TAB_ENTER] = ACTION_TAP_DANCE_DOUBLE(KC_TAB, KC_ENT)
+    [TD_C_X] = ACTION_TAP_DANCE_DOUBLE(LCTL(KC_C),LCTL(KC_X)),
+    [TD_1_F1] = ACTION_TAP_DANCE_DOUBLE(KC_1 ,KC_F1),
+    [TD_2_F2] = ACTION_TAP_DANCE_DOUBLE(KC_2 ,KC_F2),
+    [TD_3_F3] = ACTION_TAP_DANCE_DOUBLE(KC_3 ,KC_F3),
+    [TD_4_F4] = ACTION_TAP_DANCE_DOUBLE(KC_4 ,KC_F4),
+    [TD_5_F5] = ACTION_TAP_DANCE_DOUBLE(KC_5 ,KC_F5),
+    [TD_6_F6] = ACTION_TAP_DANCE_DOUBLE(KC_6 ,KC_F6),
+    [TD_7_F7] = ACTION_TAP_DANCE_DOUBLE(KC_7 ,KC_F7),
+    [TD_8_F8] = ACTION_TAP_DANCE_DOUBLE(KC_8 ,KC_F8),
+    [TD_9_F9] = ACTION_TAP_DANCE_DOUBLE(KC_9 ,KC_F9),
+    [TD_0_F10] = ACTION_TAP_DANCE_DOUBLE(KC_0 ,KC_F10),
+    [TD_EQ_F11] = ACTION_TAP_DANCE_DOUBLE(KC_EQL ,KC_F11),
+    [TD_PIPE_F12] = ACTION_TAP_DANCE_DOUBLE(KC_PIPE ,KC_F12)
+
+
 };
 
 // Add tap dance item to your keymap in place of a keycode
@@ -53,12 +79,12 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [BASE] = LAYOUT_moonlander(
-          KC_ESC,KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,  KC_F11,             KC_F12,  KC_F6,   KC_F7,   KC_F8,   KC_F9,    KC_F10,    KC_MINS,
-          KC_DEL, KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,  KC_LBRC,           KC_RBRC,  KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS,
-LT(DPAD,KC_BSPC), KC_A,    KC_S,    KC_D,    KC_F,    KC_G,  KC_LPRN,           KC_RPRN,  KC_H,    KC_J,    KC_K,    KC_L,    LT(SCRL, KC_SCLN), LT(DPAD, KC_QUOT),
+          KC_ESC,TD(TD_1_F1),TD(TD_2_F2),TD(TD_3_F3),TD(TD_4_F4), TD(TD_5_F5),    TD(TD_EQ_F11),           TD(TD_PIPE_F12), TD(TD_6_F6),TD(TD_7_F7),TD(TD_8_F8),TD(TD_9_F9),TD(TD_0_F10),   KC_MINS,
+          KC_DEL, KC_Q,  KC_W,    KC_E,    KC_R,    KC_T,  KC_LBRC,           KC_RBRC,  KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS,
+LT(DPAD,KC_BSPC), KC_A,  KC_S,    KC_D,    KC_F,    KC_G,  KC_LPRN,           KC_RPRN,  KC_H,    KC_J,    KC_K,    KC_L,    LT(SCRL, KC_SCLN), LT(DPAD, KC_QUOT),
   LCTL(KC_Y), LCTL_T(KC_Z),KC_X,    KC_C,    KC_V,    KC_B,                               KC_N,    KC_M,    KC_COMM, KC_DOT,  RCTL_T(KC_SLSH), LT(SYMB,KC_TILDE),
- LT(SYMB,KC_GRV),WEBUSB_PAIR,A(KC_LSFT),RGB_M_K, TG(DPAD),  LCTL(KC_Z),    LCTL(KC_C),          RGB_TOG,   RGB_TOG, DM_REC2, DM_REC1, DM_RSTP,
-                                    LSFT_T(KC_SPC),  KC_BSPC, KC_DEL,           LCTL(KC_V),LCTL(KC_X),      TD(TD_TAB_ENTER)
+ LT(SYMB,KC_GRV),WEBUSB_PAIR,A(KC_LSFT),RGB_M_K, TG(DPAD),  LCTL(KC_Z),    TD(TD_C_X),          RGB_TOG,   RGB_TOG, DM_REC2, DM_REC1, DM_RSTP,
+                                    LSFT_T(KC_SPC),  KC_BSPC, KC_DEL,           LCTL(KC_V),     KC_ENT,      RSFT_T(KC_TAB)
 
     ),
     // [ORIG] = LAYOUT_moonlander(
@@ -113,4 +139,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
     }
     return true;
+}
+
+void suspend_power_down_user(void) {
+    rgb_matrix_set_suspend_state(true);
+}
+
+void suspend_wakeup_init_user(void) {
+    rgb_matrix_set_suspend_state(false);
 }

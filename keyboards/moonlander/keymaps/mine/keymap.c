@@ -39,6 +39,10 @@ enum layers {
 
 enum custom_keycodes {
     VRSN = ML_SAFE_RANGE,
+    KM_SLP,
+    QUOTEPST,
+    SRCHSEL,
+
 };
 
 
@@ -143,7 +147,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       TG(AWAY), KC_Q,  KC_W,    KC_E,    KC_R,    KC_T,  KC_LBRC,           KC_RBRC,  KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS,
   TG(DPAD), LT(DPAD, KC_A),  KC_S,    KC_D,    KC_F,    KC_G,  KC_LPRN,           KC_RPRN,  KC_H,LT(DPAD, KC_J),    LT(DPAD2, KC_K),   LT(DPAD3, KC_L),    LT(SCRL, KC_SCLN), LT(MDIA, KC_QUOT),
   LCTL(KC_Y), LCTL_T(KC_Z),KC_X,    KC_C,    KC_V,    KC_B,                               KC_N,    KC_M,    KC_COMM, KC_DOT,  RCTL_T(KC_SLSH), LT(AWAY,KC_TILDE),
- LT(SYMB,KC_GRV),WEBUSB_PAIR,A(KC_LSFT),_______, _______,  LCTL(KC_Z),    TD(TD_C_X),          RGB_TOG,   RGB_TOG, RGB_TOG, TD(TD_MAC2), TD(TD_MAC1),
+ LT(SYMB,KC_GRV),WEBUSB_PAIR,A(KC_LSFT),_______, KM_SLP,  LCTL(KC_Z),    TD(TD_C_X),          RGB_TOG,   RGB_TOG, RGB_TOG, TD(TD_MAC2), TD(TD_MAC1),
                                     LSFT_T(KC_SPC), KC_BSPC,   KC_LALT,          LCTL(KC_V),     KC_ENT,      RSFT_T(KC_TAB)
 
     ),
@@ -218,8 +222,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         TG(AWAY),_______, KC_A   , KC_MS_UP   , KC_A   , _______, _______,                     _______, _______,  KC_PGUP, KC_MS_WH_UP, KC_PGDOWN, _______, _______,
         _______,KC_MS_BTN4, KC_MS_LEFT, KC_MS_DOWN , KC_MS_RIGHT, KC_MS_BTN5, _______,         _______, _______, KC_MS_WH_LEFT, KC_MS_WH_DOWN, KC_MS_WH_RIGHT,LT(DPAD, KC_QUOT),
         _______,_______, KC_MS_ACCEL0   , KC_MS_ACCEL1   , KC_MS_ACCEL2, _______,                                       _______, _______, _______, _______, _______, _______,
-        _______,_______, _______, _______,TG(AWAY), _______,          _______,                     _______,          _______, _______, _______, _______, _______,
-                                            KC_MS_BTN1, KC_MS_BTN2, _______,                     _______, _______, _______
+        _______,_______, _______, _______,TG(AWAY), _______,          _______,                     TD(TD_C_X),          _______, _______, _______,TD(TD_MAC2), TD(TD_MAC1),
+                                            KC_MS_BTN1, KC_MS_BTN2, _______,                     LCTL(KC_V), QUOTEPST, SRCHSEL
     ),
     [SCRL] = LAYOUT_moonlander(
         _______,_______,_______, _______, _______, _______, _______,                     _______, _______, _______, _______, _______, _______, _______,
@@ -227,7 +231,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______,   _______, KC_MS_WH_LEFT, KC_MS_WH_DOWN, KC_MS_WH_RIGHT,  _______,      _______, _______, _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______, _______,                                     _______, _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______,          _______,                   _______,          _______, _______, _______, _______, _______,
-                                            _______, _______, _______,                   _______, _______, _______,
+                                            _______, _______, _______,                  _______, _______, _______,
     )
 };
 
@@ -237,6 +241,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case VRSN:
             SEND_STRING (QMK_KEYBOARD "/" QMK_KEYMAP " @ " QMK_VERSION);
             return false;
+
+        case KM_SLP:
+            wait_ms(250);
+            return false;
+        
+        case QUOTEPST:
+           SEND_STRING("\"\"" SS_TAP(X_LEFT) SS_DELAY(100) SS_LCTL("v") );
+           return false;
+
+        case SRCHSEL:  // Searches the current selection in a new tab.
+            SEND_STRING(SS_LCTL("t") SS_DELAY(100) SS_LCTL("v") SS_TAP(X_ENTER));
+            return false;
+
+
         }
     }
     return true;

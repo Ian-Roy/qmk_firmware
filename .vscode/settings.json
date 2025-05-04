@@ -30,5 +30,8 @@
     },
     "clangd.arguments": [
         "--header-insertion=never"
-    ]
+    ],
+    "python.defaultInterpreterPath": "./.qmk/bin/python" 
+ 
+      
 }
